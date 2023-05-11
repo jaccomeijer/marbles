@@ -1,5 +1,9 @@
-import { TestScheduler } from 'rxjs/testing'
-import { map } from 'rxjs'
+import {
+  TestScheduler,
+} from 'rxjs/testing'
+import {
+  map,
+} from 'rxjs'
 
 describe('Playing with marbles', () => {
   let testScheduler: TestScheduler
@@ -12,7 +16,9 @@ describe('Playing with marbles', () => {
 
   it('should test a simple map', () => {
     testScheduler.run((helpers) => {
-      const { hot, expectObservable } = helpers
+      const {
+        hot, expectObservable,
+      } = helpers
 
       const inputString = 'ab'
       const expectString = 'ab'

@@ -1,5 +1,9 @@
-import { TestScheduler } from 'rxjs/testing'
-import { type Observable, map } from 'rxjs'
+import {
+  TestScheduler,
+} from 'rxjs/testing'
+import {
+  type Observable, map,
+} from 'rxjs'
 
 enum Action {
   Start = 'Start',
@@ -11,10 +15,10 @@ enum Action {
 }
 
 const epic = () => {
-  return (sourceObs: Observable<Action>) => sourceObs.pipe(
-    map(value => {
-      if (value === Action.Start) return Action.Stop
-      return Action.ShiftUp
+  return (action$: Observable<Action>) => action$.pipe(
+    map(action => {
+      if (action === Action.ShiftUp) return Action.ShiftDown
+      return action
     }),
   )
 }
@@ -30,19 +34,25 @@ describe('Playing with marbles', () => {
 
   it('should test an epic', () => {
     testScheduler.run((helpers) => {
-      const { hot, expectObservable } = helpers
+      const {
+        hot, expectObservable,
+      } = helpers
 
-      const inputString = 'ab'
-      const expectString = 'ab'
+      const inputString = 'abcd'
+      const expectString = 'abcd'
 
       const inputValues = {
         a: Action.Start,
-        b: Action.Stop,
+        b: Action.ShiftUp,
+        c: Action.ShiftDown,
+        d: Action.Stop,
       }
 
       const expectedValues = {
-        a: Action.Stop,
-        b: Action.ShiftUp,
+        a: Action.Start,
+        b: Action.ShiftDown,
+        c: Action.ShiftDown,
+        d: Action.Stop,
       }
 
       const obsA = hot(inputString, inputValues).pipe(epic())
